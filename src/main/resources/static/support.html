@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>海舟智税云 - 支持中心</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    }
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    .app-header {
+      background: #1976d2;
+      color: white;
+      padding: 16px 16px 12px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1976d2;
+    }
+    .list-item {
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .list-item:last-child {
+      border-bottom: none;
+    }
+    .qna-item {
+      padding: 16px 0;
+      border-bottom: 1px solid #eee;
+    }
+    .qna-question {
+      font-weight: 600;
+      color: #1976d2;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+    .qna-answer {
+      color: #555;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      background: white;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      height: 56px;
+    }
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #888;
+      text-decoration: none;
+      padding: 4px 0;
+    }
+    .tab-item.active {
+      color: #1976d2;
+    }
+    .tab-item i {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-header">支持中心</div>
+  <div class="app-container">
+    
+    <!-- 联系我们 -->
+    <div class="card">
+      <div class="card-title">联系我们</div>
+      <div class="list-item">
+        <span>电话联系</span>
+        <a href="19129841841" style="color:#1976d2;">19129841841</a>
+      </div>
+      <div class="list-item">
+        <span>企业邮箱</span>
+        <a href="sl2200767364@163.com" style="color:#1976d2;">sl2200767364@163.com</a>
+      </div>
+      <div class="list-item">
+        <span>微信公众号</span>
+        <a href="https://mp.weixin.qq.com/s/-oQw7rGe_AUZxpQzPjzUyA" target="_blank" style="color:#1976d2;">赋税启航</a>
+      </div>
+      <div class="list-item">
+        <span>智能客服</span>
+        <a href="chat.html" style="color:#1976d2;">立即咨询</a>
+      </div>
+      <div class="list-item">
+        <span>团队介绍</span>
+        <a href="team.html" style="color:#1976d2;">查看</a>
+      </div>
+    </div>
+
+    <!-- 新增：完整Q&A（7个问题） -->
+    <div class="card">
+      <div class="card-title">常见问题解答</div>
+      
+      <!-- 新增的3个问题 -->
+      <div class="qna-item">
+        <div class="qna-question">如何申请退税？</div>
+        <div class="qna-answer">登录系统→选择退税类型→上传凭证→提交申请，全程在线办理（3分钟完成）</div>
+      </div>
+      
+      <div class="qna-item">
+        <div class="qna-question">API接入流程</div>
+        <div class="qna-answer">注册开发者账号→获取API密钥→按文档调用接口→测试验证→正式上线（24小时开通）</div>
+      </div>
+      
+      <div class="qna-item">
+        <div class="qna-question">政策文件查询</div>
+        <div class="qna-answer">在"政策库"搜索关键词，支持按税种/时间/地区筛选，更新至最新政策</div>
+      </div>
+      
+      <!-- 保留的4个核心问题 -->
+      <div class="qna-item">
+        <div class="qna-question">需要对接 ERP 或财务系统吗？</div>
+        <div class="qna-answer">不需要，我们支持直接上传单据与数据导入</div>
+      </div>
+      
+      <div class="qna-item">
+        <div class="qna-question">是否适用于小卖家？</div>
+        <div class="qna-answer">是，中小个人卖家是我们第一目标群体</div>
+      </div>
+      
+      <div class="qna-item">
+        <div class="qna-question">我的数据安全吗？</div>
+        <div class="qna-answer">上传全程加密+区块链存证+本地敏感脱敏</div>
+      </div>
+      
+      <div class="qna-item">
+        <div class="qna-question">现在可以试用吗？</div>
+        <div class="qna-answer">我们开放"内测试点"，欢迎申请（填写表单10分钟开通）</div>
+      </div>
+    </div>
+  <div class="tab-bar">
+    <a href="index.html" class="tab-item"><i>🏠</i>首页</a>
+    <a href="resources.html" class="tab-item"><i>📚</i>资源</a>
+    <a href="support.html" class="tab-item active"><i>❓</i>支持</a>
+    <a href="profile.html" class="tab-item"><i>👤</i>我的</a>
+  </div>
+</body>
+</html>

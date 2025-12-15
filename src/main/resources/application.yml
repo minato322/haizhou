@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: smart-tax-db
+  
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/smart_tax_db?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.haizhou.smarttax.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+server:
+  port: 8080
+
+jwt:
+  secret: haizhou-smart-tax-cloud-2025-secret-key-very-long-string
+  expiration: 86400000
+
+deepseek:
+  api-key: sk-fcfc98d34b324edea9e248555b0d78cb
+  api-url: https://api.deepseek.com/v1/chat/completions
+  model: deepseek-chat
+
+logging:
+  level:
+    com.haizhou.smarttax: debug

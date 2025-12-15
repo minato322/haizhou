@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>海舟智税云</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    }
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    .app-header {
+      background: #1976d2;
+      color: white;
+      padding: 16px 16px 12px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1976d2;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #1976d2;
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 12px 0;
+      text-decoration: none;
+      border: none;
+      font-size: 16px;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #1976d2;
+      color: #1976d2;
+    }
+    .list-item {
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+    }
+    .list-item:last-child {
+      border-bottom: none;
+    }
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      background: white;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      height: 56px;
+    }
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #888;
+      text-decoration: none;
+      padding: 4px 0;
+    }
+    .tab-item.active {
+      color: #1976d2;
+    }
+    .tab-item i {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+    ul {
+      padding-left: 16px;
+    }
+    li {
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-header">基础智能退税</div>
+  <div class="app-container">
+    <div class="card">
+      <p style="color: #1976d2; font-weight: 600;">¥99 / 月 · 中小企业首选</p>
+      <ul style="margin: 16px 0;">
+        <li>✅ 自动申报：对接亚马逊、速卖通等10+平台</li>
+        <li>✅ 进度可视化：实时查看审核、放款状态</li>
+        <li>✅ 合规风控：自动匹配报关单与物流数据</li>
+        <li>✅ 政策合规：支持2025年第15号公告要求</li>
+        <li>✅ 7×24小时客服支持</li>
+      </ul>
+      <a href="register.html" class="btn">立即开通</a>
+      <a href="support.html" class="btn btn-outline">获取帮助</a>
+    </div>
+  </div>
+
+  <div class="tab-bar">
+    <a href="index.html" class="tab-item"><i>🏠</i>首页</a>
+    <a href="resources.html" class="tab-item"><i>📚</i>资源</a>
+    <a href="support.html" class="tab-item"><i>❓</i>支持</a>
+    <a href="profile.html" class="tab-item"><i>👤</i>我的</a>
+  </div>
+
+  <script src="/js/auth.js"></script>
+  <script>
+    if (!Auth.isLoggedIn()) {
+      alert('请先登录后再使用此功能');
+      window.location.href = '/login.html';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>在线客服</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    }
+    body {
+      background-color: #f0f0f0;
+      color: #333;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-header {
+      background: #1976d2;
+      color: white;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      font-size: 17px;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .chat-header span {
+      margin-left: 10px;
+    }
+
+    .chat-messages {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      background: #f0f0f0;
+    }
+
+    .message {
+      max-width: 80%;
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      line-height: 1.5;
+      position: relative;
+      word-break: break-word;
+    }
+
+    .message.received {
+      align-self: flex-start;
+      background: white;
+      border-radius: 18px 18px 18px 4px;
+      color: #333;
+    }
+
+    .message.sent {
+      align-self: flex-end;
+      background: #1976d2;
+      color: white;
+      border-radius: 18px 18px 4px 18px;
+    }
+
+    .chat-input-area {
+      display: flex;
+      padding: 8px;
+      background: white;
+      border-top: 1px solid #ddd;
+      align-items: center;
+    }
+
+    .action-btn {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #1976d2;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .input-wrapper {
+      flex: 1;
+      position: relative;
+    }
+
+    #messageInput {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      margin-left: 8px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    /* 功能面板 */
+    .action-panel {
+      display: none;
+      position: absolute;
+      bottom: 60px;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 16px;
+      border-top: 1px solid #eee;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      z-index: 90;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .action-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+      color: #555;
+    }
+
+    .action-item i {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f5f7fa;
+      border-radius: 12px;
+      margin-bottom: 6px;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-header">
+    <span>💬 在线客服</span>
+  </div>
+
+  <div class="chat-messages" id="chatMessages">
+    <div class="message received">您好！我是海舟智税云客服小舟，请问有什么可以帮您？</div>
+  </div>
+
+  <div class="action-panel" id="actionPanel">
+    <div class="action-grid">
+      <div class="action-item">
+        <i>🖼️</i>
+        <span>图片</span>
+      </div>
+      <div class="action-item">
+        <i>📹</i>
+        <span>视频</span>
+      </div>
+      <div class="action-item">
+        <i>📄</i>
+        <span>文档</span>
+      </div>
+      <div class="action-item">
+        <i>📍</i>
+        <span>位置</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-input-area">
+    <button class="action-btn" id="actionToggle">+</button>
+    <div class="input-wrapper">
+      <input type="text" id="messageInput" placeholder="输入消息..." autocomplete="off">
+    </div>
+    <button class="send-btn" id="sendBtn">➤</button>
+  </div>
+
+  <script>
+    const chatMessages = document.getElementById('chatMessages');
+    const messageInput = document.getElementById('messageInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const actionToggle = document.getElementById('actionToggle');
+    const actionPanel = document.getElementById('actionPanel');
+
+    // 切换功能面板
+    actionToggle.addEventListener('click', () => {
+      actionPanel.style.display = actionPanel.style.display === 'block' ? 'none' : 'block';
+    });
+
+    // 点击外部关闭面板
+    document.addEventListener('click', (e) => {
+      if (!actionToggle.contains(e.target) && !actionPanel.contains(e.target)) {
+        actionPanel.style.display = 'none';
+      }
+    });
+
+    // 发送消息
+    async function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+
+      // 用户消息
+      const userMsg = document.createElement('div');
+      userMsg.className = 'message sent';
+      userMsg.textContent = text;
+      chatMessages.appendChild(userMsg);
+
+      messageInput.value = '';
+      scrollToBottom();
+
+      // 显示"正在输入..."提示
+      const typingMsg = document.createElement('div');
+      typingMsg.className = 'message received';
+      typingMsg.textContent = '正在输入...';
+      typingMsg.id = 'typing-indicator';
+      chatMessages.appendChild(typingMsg);
+      scrollToBottom();
+
+      try {
+        // 调用后端DeepSeek AI API
+        const response = await Auth.fetchWithAuth('/api/v1/chat/message', {
+          method: 'POST',
+          body: JSON.stringify({
+            content: text
+          })
+        });
+
+        // 移除"正在输入..."提示
+        const typing = document.getElementById('typing-indicator');
+        if (typing) typing.remove();
+
+        if (response && response.ok) {
+          const result = await response.json();
+          
+          if (result.code === 200 && result.data) {
+            // 显示AI回复
+            const botMsg = document.createElement('div');
+            botMsg.className = 'message received';
+            botMsg.textContent = result.data.messageContent || '抱歉，我暂时无法回答这个问题。';
+            chatMessages.appendChild(botMsg);
+          } else {
+            throw new Error(result.message || 'API返回错误');
+          }
+        } else {
+          throw new Error('网络请求失败');
+        }
+      } catch (error) {
+        console.error('发送消息失败：', error);
+        
+        // 移除"正在输入..."提示
+        const typing = document.getElementById('typing-indicator');
+        if (typing) typing.remove();
+        
+        // 显示错误提示
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'message received';
+        errorMsg.textContent = '抱歉，消息发送失败。请稍后重试或联系客服：19129841841';
+        chatMessages.appendChild(errorMsg);
+      }
+      
+      scrollToBottom();
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+
+    function scrollToBottom() {
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+  </script>
+
+  <!-- 登录检查 -->
+  <script src="/js/auth.js"></script>
+  <script>
+    // 检查登录状态
+    if (!Auth.isLoggedIn()) {
+      alert('请先登录后再使用在线客服');
+      window.location.href = '/login.html';
+    }
+  </script>
+</body>
+</html>

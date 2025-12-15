@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haizhou.smarttax.mapper.ApiKeyMapper">
+    
+    <resultMap id="ApiKeyResultMap" type="com.haizhou.smarttax.entity.ApiKey">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="apiKey" column="api_key"/>
+        <result property="apiSecret" column="api_secret"/>
+        <result property="status" column="status"/>
+        <result property="expireDate" column="expire_date"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findById" resultMap="ApiKeyResultMap">
+        SELECT * FROM api_key WHERE id = #{id}
+    </select>
+    
+    <select id="findByApiKey" resultMap="ApiKeyResultMap">
+        SELECT * FROM api_key WHERE api_key = #{apiKey}
+    </select>
+    
+    <select id="findByUserId" resultMap="ApiKeyResultMap">
+        SELECT * FROM api_key WHERE user_id = #{userId}
+    </select>
+    
+    <insert id="insert" parameterType="com.haizhou.smarttax.entity.ApiKey" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO api_key (user_id, api_key, api_secret, status, expire_date)
+        VALUES (#{userId}, #{apiKey}, #{apiSecret}, #{status}, #{expireDate})
+    </insert>
+    
+    <update id="update" parameterType="com.haizhou.smarttax.entity.ApiKey">
+        UPDATE api_key
+        <set>
+            <if test="status != null">status = #{status},</if>
+            <if test="expireDate != null">expire_date = #{expireDate},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <delete id="deleteById">
+        DELETE FROM api_key WHERE id = #{id}
+    </delete>
+    
+</mapper>

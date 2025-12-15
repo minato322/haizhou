@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haizhou.smarttax.mapper.ExchangeRateMapper">
+    
+    <resultMap id="ExchangeRateResultMap" type="com.haizhou.smarttax.entity.ExchangeRate">
+        <id property="id" column="id"/>
+        <result property="fromCurrency" column="from_currency"/>
+        <result property="toCurrency" column="to_currency"/>
+        <result property="rate" column="rate"/>
+        <result property="rateDate" column="rate_date"/>
+        <result property="createdAt" column="created_at"/>
+        <result property="updatedAt" column="updated_at"/>
+    </resultMap>
+    
+    <select id="findByLatest" resultMap="ExchangeRateResultMap">
+        SELECT * FROM exchange_rate 
+        WHERE from_currency = #{fromCurrency} AND to_currency = #{toCurrency}
+        ORDER BY rate_date DESC LIMIT 1
+    </select>
+    
+    <select id="findByDate" resultMap="ExchangeRateResultMap">
+        SELECT * FROM exchange_rate 
+        WHERE from_currency = #{fromCurrency} 
+        AND to_currency = #{toCurrency}
+        AND rate_date = #{rateDate}
+    </select>
+    
+    <insert id="insert" parameterType="com.haizhou.smarttax.entity.ExchangeRate" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO exchange_rate (from_currency, to_currency, rate, rate_date)
+        VALUES (#{fromCurrency}, #{toCurrency}, #{rate}, #{rateDate})
+    </insert>
+    
+</mapper>

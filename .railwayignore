@@ -1,0 +1,26 @@
+# IDE 文件
+.idea/
+*.iml
+
+# 构建输出
+target/
+build/
+out/
+dist/
+
+# 日志
+logs/
+*.log
+
+# 环境变量文件（安全）
+.env
+.env.local
+.env.production.local
+
+# 操作系统文件
+.DS_Store
+Thumbs.db
+
+# 测试文件
+*.test
+*.spec
