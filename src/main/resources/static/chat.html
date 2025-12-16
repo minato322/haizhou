@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>在线客服</title>
+  <title>海舟智税云 - 在线客服</title>
   <style>
     * {
       margin: 0;
@@ -51,6 +51,8 @@
       line-height: 1.5;
       position: relative;
       word-break: break-word;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      white-space: pre-wrap; /* 保留换行符 */
     }
 
     .message.received {
@@ -65,6 +67,25 @@
       background: #1976d2;
       color: white;
       border-radius: 18px 18px 4px 18px;
+    }
+
+    .typing-indicator {
+      font-style: italic;
+      color: #666;
+    }
+
+    .error-message {
+      background-color: #ffebee !important;
+      color: #c62828 !important;
+      border: 1px solid #ffcdd2;
+    }
+
+    .login-prompt {
+      background-color: #fff8e1 !important;
+      color: #5d4037 !important;
+      border: 1px solid #ffd54f;
+      text-align: center;
+      padding: 15px;
     }
 
     .chat-input-area {
@@ -100,6 +121,11 @@
       border-radius: 20px;
       font-size: 16px;
       outline: none;
+      transition: border-color 0.3s;
+    }
+
+    #messageInput:focus {
+      border-color: #1976d2;
     }
 
     .send-btn {
@@ -115,6 +141,16 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .send-btn:hover {
+      background-color: #1565c0;
+    }
+
+    .send-btn:disabled {
+      background-color: #90caf9;
+      cursor: not-allowed;
     }
 
     /* 功能面板 */
@@ -143,6 +179,12 @@
       align-items: center;
       font-size: 12px;
       color: #555;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .action-item:hover {
+      transform: translateY(-2px);
     }
 
     .action-item i {
@@ -156,29 +198,74 @@
       margin-bottom: 6px;
       font-size: 20px;
     }
+
+    /* 连接状态指示器 */
+    .connection-status {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .status-connected {
+      background-color: #4caf50;
+    }
+
+    .status-disconnected {
+      background-color: #f44336;
+    }
+
+    .auth-status {
+      position: absolute;
+      top: 10px;
+      right: 120px;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.2);
+    }
+
+    .auth-authenticated {
+      background-color: #4caf50;
+    }
+
+    .auth-unauthenticated {
+      background-color: #ff9800;
+    }
+    
+    .login-link {
+      color: #1976d2;
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="chat-header">
-    <span>💬 在线客服</span>
+    <span>💬💬 海舟智税云 - AI在线客服</span>
+    <div class="auth-status" id="authStatus">检查登录状态...</div>
+    <div class="connection-status" id="connectionStatus">检查连接...</div>
   </div>
 
   <div class="chat-messages" id="chatMessages">
-    <div class="message received">您好！我是海舟智税云客服小舟，请问有什么可以帮您？</div>
+    <div class="message received">正在检查登录状态，请稍候...</div>
   </div>
 
   <div class="action-panel" id="actionPanel">
     <div class="action-grid">
       <div class="action-item">
-        <i>🖼️</i>
+        <i>🖼🖼🖼️</i>
         <span>图片</span>
       </div>
       <div class="action-item">
-        <i>📹</i>
+        <i>📹📹</i>
         <span>视频</span>
       </div>
       <div class="action-item">
-        <i>📄</i>
+        <i>📄📄</i>
         <span>文档</span>
       </div>
       <div class="action-item">
@@ -191,20 +278,31 @@
   <div class="chat-input-area">
     <button class="action-btn" id="actionToggle">+</button>
     <div class="input-wrapper">
-      <input type="text" id="messageInput" placeholder="输入消息..." autocomplete="off">
+      <input type="text" id="messageInput" placeholder="输入您的问题..." autocomplete="off" disabled>
     </div>
-    <button class="send-btn" id="sendBtn">➤</button>
+    <button class="send-btn" id="sendBtn" disabled>➤➤</button>
   </div>
 
   <script>
+    // DOM元素
     const chatMessages = document.getElementById('chatMessages');
     const messageInput = document.getElementById('messageInput');
     const sendBtn = document.getElementById('sendBtn');
     const actionToggle = document.getElementById('actionToggle');
     const actionPanel = document.getElementById('actionPanel');
+    const connectionStatus = document.getElementById('connectionStatus');
+    const authStatus = document.getElementById('authStatus');
+
+    const API_BASE_URL = 'http://localhost:8080/api';
+
+    // 调试函数
+    function debugLog(message, data = null) {
+      console.log(`[DEBUG] ${message}`, data || '');
+    }
 
     // 切换功能面板
-    actionToggle.addEventListener('click', () => {
+    actionToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
       actionPanel.style.display = actionPanel.style.display === 'block' ? 'none' : 'block';
     });
 
@@ -215,10 +313,160 @@
       }
     });
 
-    // 发送消息
+    // 获取认证token
+    function getAuthToken() {
+      return localStorage.getItem('token') || '';
+    }
+
+    // 检查用户信息
+    function getUserInfo() {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          return JSON.parse(userStr);
+        } catch (e) {
+          console.error('解析用户信息失败:', e);
+        }
+      }
+      return null;
+    }
+
+    // 检查登录状态
+    async function checkLoginStatus() {
+      const token = getAuthToken();
+      const userInfo = getUserInfo();
+      
+      debugLog('检查登录状态', { hasToken: !!token, userInfo });
+      
+      if (!token || !userInfo) {
+        authStatus.textContent = '未登录';
+        authStatus.className = 'auth-status auth-unauthenticated';
+        
+        // 显示登录提示
+        const loginMsg = document.createElement('div');
+        loginMsg.className = 'message received login-prompt';
+        loginMsg.innerHTML = `
+          <strong>⚠️ 您尚未登录</strong><br/>
+          <small>请先<span class="login-link" id="goToLogin">登录</span>以使用AI客服功能</small>
+        `;
+        chatMessages.innerHTML = '';
+        chatMessages.appendChild(loginMsg);
+        
+        // 添加登录链接点击事件
+        document.getElementById('goToLogin').addEventListener('click', () => {
+          window.location.href = 'login.html';
+        });
+        
+        // 禁用输入框
+        messageInput.disabled = true;
+        sendBtn.disabled = true;
+        messageInput.placeholder = '请先登录';
+        
+        return false;
+      }
+      
+      // 验证token有效性
+      try {
+        debugLog('验证token', { token: token.substring(0, 10) + '...' });
+        
+        const response = await fetch(`${API_BASE_URL}/v1/auth/verify`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        debugLog('Token验证响应', { status: response.status, ok: response.ok });
+        
+        if (response.ok) {
+          authStatus.textContent = `已登录: ${userInfo.email || '用户'}`;
+          authStatus.className = 'auth-status auth-authenticated';
+          
+          // 显示欢迎消息
+          chatMessages.innerHTML = '';
+          const welcomeMsg = document.createElement('div');
+          welcomeMsg.className = 'message received';
+          welcomeMsg.textContent = `您好${userInfo.name ? ' ' + userInfo.name : ''}！我是海舟智税云AI客服小舟，请问有什么可以帮您？`;
+          chatMessages.appendChild(welcomeMsg);
+          
+          // 启用输入框
+          messageInput.disabled = false;
+          sendBtn.disabled = false;
+          messageInput.placeholder = '输入您的问题...';
+          messageInput.focus();
+          
+          return true;
+        } else {
+          // Token无效
+          debugLog('Token无效，清除本地存储');
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          return checkLoginStatus(); // 重新检查
+        }
+      } catch (error) {
+        console.error('验证token失败:', error);
+        authStatus.textContent = '验证失败';
+        authStatus.className = 'auth-status auth-unauthenticated';
+        
+        // 显示错误消息
+        const errorMsg = document.createElement('div');
+        errorMsg.className = 'message received error-message';
+        errorMsg.innerHTML = `
+          <strong>⚠️ 登录状态验证失败</strong><br/>
+          <small>错误: ${error.message}</small><br/>
+          <small>请<span class="login-link" id="retryLogin">重新登录</span></small>
+        `;
+        chatMessages.innerHTML = '';
+        chatMessages.appendChild(errorMsg);
+        
+        document.getElementById('retryLogin').addEventListener('click', () => {
+          window.location.href = 'login.html';
+        });
+        
+        return false;
+      }
+    }
+
+    // 检查后端连接状态
+    async function checkBackendConnection() {
+      try {
+        debugLog('检查后端连接');
+        
+        const response = await fetch(`${API_BASE_URL}/v1/chat/message`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken()
+          },
+          body: JSON.stringify({ content: 'test' })
+        });
+        
+        debugLog('后端连接检查响应', { status: response.status, ok: response.ok });
+        
+        if (response.ok || response.status === 401) {
+          connectionStatus.textContent = '服务正常';
+          connectionStatus.className = 'connection-status status-connected';
+        } else {
+          connectionStatus.textContent = '服务错误';
+          connectionStatus.className = 'connection-status status-disconnected';
+        }
+      } catch (error) {
+        connectionStatus.textContent = '连接失败';
+        connectionStatus.className = 'connection-status status-disconnected';
+        console.error('后端连接检查失败:', error);
+      }
+    }
+
+    // 发送消息到后端AI服务
     async function sendMessage() {
       const text = messageInput.value.trim();
       if (!text) return;
+
+      debugLog('发送消息', { text });
+
+      // 禁用输入和发送按钮
+      messageInput.disabled = true;
+      sendBtn.disabled = true;
 
       // 用户消息
       const userMsg = document.createElement('div');
@@ -229,77 +477,155 @@
       messageInput.value = '';
       scrollToBottom();
 
-      // 显示"正在输入..."提示
-      const typingMsg = document.createElement('div');
-      typingMsg.className = 'message received';
-      typingMsg.textContent = '正在输入...';
-      typingMsg.id = 'typing-indicator';
-      chatMessages.appendChild(typingMsg);
+      // 显示"正在输入"提示
+      const typingIndicator = document.createElement('div');
+      typingIndicator.className = 'message received typing-indicator';
+      typingIndicator.id = 'typingIndicator';
+      typingIndicator.innerHTML = '💭💭 AI客服正在思考中...';
+      chatMessages.appendChild(typingIndicator);
       scrollToBottom();
 
       try {
-        // 调用后端DeepSeek AI API
-        const response = await Auth.fetchWithAuth('/api/v1/chat/message', {
-          method: 'POST',
-          body: JSON.stringify({
-            content: text
-          })
+        debugLog('准备发送API请求', { 
+          url: `${API_BASE_URL}/v1/chat/message`,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken().substring(0, 10) + '...'
+          },
+          body: { content: text }
         });
 
-        // 移除"正在输入..."提示
-        const typing = document.getElementById('typing-indicator');
-        if (typing) typing.remove();
+        // 调用后端AI聊天接口
+        const response = await fetch(`${API_BASE_URL}/v1/chat/message`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getAuthToken()
+          },
+          body: JSON.stringify({ content: text })
+        });
 
-        if (response && response.ok) {
-          const result = await response.json();
-          
-          if (result.code === 200 && result.data) {
-            // 显示AI回复
-            const botMsg = document.createElement('div');
-            botMsg.className = 'message received';
-            botMsg.textContent = result.data.messageContent || '抱歉，我暂时无法回答这个问题。';
-            chatMessages.appendChild(botMsg);
-          } else {
-            throw new Error(result.message || 'API返回错误');
+        debugLog('API响应状态', { 
+          status: response.status, 
+          statusText: response.statusText,
+          ok: response.ok 
+        });
+
+        // 移除"正在输入"提示
+        document.getElementById('typingIndicator')?.remove();
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            // 未授权，需要重新登录
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            checkLoginStatus();
+            throw new Error('登录已过期，请重新登录');
           }
-        } else {
-          throw new Error('网络请求失败');
+          
+          let errorDetail = `HTTP错误! 状态码: ${response.status}`;
+          try {
+            const errorResponse = await response.text();
+            errorDetail += `, 响应: ${errorResponse}`;
+          } catch (e) {
+            // 忽略解析错误
+          }
+          throw new Error(errorDetail);
         }
+
+        const result = await response.json();
+        debugLog('API响应数据', result);
+        
+        let replyText = '';
+        
+        // 根据您提供的响应结构，AI回复在 data.messageContent 中
+        if (result.data && result.data.messageContent) {
+          // 这是您后端返回的正确结构
+          replyText = result.data.messageContent;
+          debugLog('使用data.messageContent结构', replyText);
+        } else if (result.choices && result.choices[0] && result.choices[0].message) {
+          // DeepSeek API直接返回的结构
+          replyText = result.choices[0].message.content;
+          debugLog('使用DeepSeek API结构', replyText);
+        } else if (result.data && result.data.content) {
+          // 封装后的成功响应
+          replyText = result.data.content;
+          debugLog('使用封装响应结构', replyText);
+        } else if (result.data && result.data.reply) {
+          replyText = result.data.reply;
+          debugLog('使用reply字段', replyText);
+        } else if (result.content) {
+          replyText = result.content;
+          debugLog('使用content字段', replyText);
+        } else if (result.success && result.data) {
+          // 处理封装的成功响应
+          replyText = result.data.content || result.data.reply || '收到您的消息';
+          debugLog('使用success.data结构', replyText);
+        } else {
+          replyText = '抱歉，暂时无法获取回复内容。响应结构: ' + JSON.stringify(result);
+          debugLog('无法识别的响应结构', result);
+        }
+
+        // 显示AI回复
+        const botMsg = document.createElement('div');
+        botMsg.className = 'message received';
+        botMsg.textContent = replyText;
+        chatMessages.appendChild(botMsg);
+        debugLog('AI回复已显示', replyText);
+
       } catch (error) {
-        console.error('发送消息失败：', error);
+        console.error('调用AI服务失败:', error);
         
-        // 移除"正在输入..."提示
-        const typing = document.getElementById('typing-indicator');
-        if (typing) typing.remove();
-        
-        // 显示错误提示
+        // 显示错误信息
         const errorMsg = document.createElement('div');
-        errorMsg.className = 'message received';
-        errorMsg.textContent = '抱歉，消息发送失败。请稍后重试或联系客服：19129841841';
+        errorMsg.className = 'message received error-message';
+        errorMsg.innerHTML = `
+          <strong>⚠️ 消息发送失败</strong><br/>
+          <small>错误信息: ${error.message}</small>
+        `;
         chatMessages.appendChild(errorMsg);
+        debugLog('错误已显示', error.message);
+      } finally {
+        // 重新启用输入和发送按钮
+        const isLoggedIn = getAuthToken() && getUserInfo();
+        messageInput.disabled = !isLoggedIn;
+        sendBtn.disabled = !isLoggedIn;
+        if (isLoggedIn) {
+          messageInput.focus();
+        }
+        debugLog('输入状态已恢复', { isLoggedIn });
       }
       
       scrollToBottom();
     }
 
+    // 事件监听
     sendBtn.addEventListener('click', sendMessage);
     messageInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') sendMessage();
     });
 
+    // 功能面板项点击事件
+    document.querySelectorAll('.action-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const type = item.querySelector('span').textContent;
+        const message = `我想发送一个${type}`;
+        messageInput.value = message;
+        actionPanel.style.display = 'none';
+        messageInput.focus();
+      });
+    });
+
     function scrollToBottom() {
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
-  </script>
 
-  <!-- 登录检查 -->
-  <script src="/js/auth.js"></script>
-  <script>
-    // 检查登录状态
-    if (!Auth.isLoggedIn()) {
-      alert('请先登录后再使用在线客服');
-      window.location.href = '/login.html';
-    }
+    // 页面加载时初始化
+    window.addEventListener('load', async () => {
+      debugLog('页面加载完成');
+      await checkLoginStatus();
+      checkBackendConnection();
+    });
   </script>
 </body>
 </html>

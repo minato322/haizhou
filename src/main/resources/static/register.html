@@ -149,11 +149,11 @@
     <a href="index.html" class="tab-item"><i>🏠</i>首页</a>
     <a href="resources.html" class="tab-item"><i>📚</i>资源</a>
     <a href="support.html" class="tab-item"><i>❓</i>支持</a>
-    <a href="profile.html" class="tab-item active"><i>👤</i>我的</a>
+    <a href="user.html" class="tab-item active"><i>👤</i>我的</a>
   </div>
 
   <script>
-    const API_BASE_URL = '';
+    const API_BASE_URL = 'http://localhost:8080/api';
     
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -175,7 +175,7 @@
       }
       
       try {
-        const response = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
+        const response = await fetch(`${API_BASE_URL}/v1/auth/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -190,12 +190,8 @@
           localStorage.setItem('token', result.data.token);
           localStorage.setItem('user', JSON.stringify(result.data.user));
           
-          alert('注册成功！欢迎 ' + result.data.user.email);
-          
-          // 延迟跳转，确保数据保存
-          setTimeout(() => {
-            window.location.href = '/index.html';
-          }, 500);
+          alert('注册成功！');
+          window.location.href = 'index.html';
         } else {
           alert('注册失败：' + result.message);
         }

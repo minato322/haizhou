@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>海舟智税云 - 个人中心</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    }
+    body {
+      background-color: #f5f7fa;
+      color: #333;
+      line-height: 1.6;
+    }
+    .app-header {
+      background: #1976d2;
+      color: white;
+      padding: 16px 16px 12px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .app-container {
+      max-width: 500px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1976d2;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #1976d2;
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: 600;
+      margin: 12px 0;
+      text-decoration: none;
+      border: none;
+      font-size: 16px;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #1976d2;
+      color: #1976d2;
+    }
+    .btn-danger {
+      background: #f44336;
+      color: white;
+      border: none;
+    }
+    .list-item {
+      padding: 14px 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .list-item:last-child {
+      border-bottom: none;
+    }
+    .user-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .user-avatar {
+      width: 60px;
+      height: 60px;
+      background: #1976d2;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+      margin-right: 16px;
+    }
+    .user-details {
+      flex: 1;
+    }
+    .user-name {
+      font-size: 18px;
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 4px;
+    }
+    .user-email {
+      font-size: 14px;
+      color: #666;
+    }
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      background: white;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+      height: 56px;
+    }
+    .tab-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #888;
+      text-decoration: none;
+      padding: 4px 0;
+    }
+    .tab-item.active {
+      color: #1976d2;
+    }
+    .tab-item i {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-header">个人中心</div>
+  <div class="app-container">
+    <!-- 用户信息 -->
+    <div class="card">
+      <div class="user-info">
+        <div class="user-avatar" id="userAvatar">👤</div>
+        <div class="user-details">
+          <div class="user-name" id="userName">加载中...</div>
+          <div class="user-email" id="userEmail">加载中...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 我的服务 -->
+    <div class="card">
+      <div class="card-title">我的服务</div>
+      <a href="basic-tax.html" class="list-item">
+        <span>智能退税</span>
+        <span>→</span>
+      </a>
+      <a href="exchange.html" class="list-item">
+        <span>汇率转换</span>
+        <span>→</span>
+      </a>
+      <a href="chat.html" class="list-item">
+        <span>在线客服</span>
+        <span>→</span>
+      </a>
+      <a href="resources.html" class="list-item">
+        <span>政策资源</span>
+        <span>→</span>
+      </a>
+    </div>
+
+    <!-- 账户设置 -->
+    <div class="card">
+      <div class="card-title">账户设置</div>
+      <a href="#" class="list-item">
+        <span>修改密码</span>
+        <span>→</span>
+      </a>
+      <a href="#" class="list-item">
+        <span>公司信息</span>
+        <span>→</span>
+      </a>
+      <a href="support.html" class="list-item">
+        <span>联系我们</span>
+        <span>→</span>
+      </a>
+    </div>
+
+    <!-- 退出登录 -->
+    <button class="btn btn-danger" id="logoutBtn">退出登录</button>
+  </div>
+
+  <div class="tab-bar">
+    <a href="index.html" class="tab-item"><i>🏠</i>首页</a>
+    <a href="resources.html" class="tab-item"><i>📚</i>资源</a>
+    <a href="support.html" class="tab-item"><i>❓</i>支持</a>
+    <a href="user.html" class="tab-item active"><i>👤</i>我的</a>
+  </div>
+
+  <script>
+    // 页面加载时检查登录状态
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('token');
+      const userData = localStorage.getItem('user');
+      
+      // 如果未登录，跳转到登录页
+      if (!token || !userData) {
+        alert('请先登录');
+        window.location.href = 'login.html';
+        return;
+      }
+      
+      // 显示用户信息
+      try {
+        const user = JSON.parse(userData);
+        document.getElementById('userName').textContent = user.companyName || '用户';
+        document.getElementById('userEmail').textContent = user.email || '未设置邮箱';
+        document.getElementById('userAvatar').textContent = user.companyName ? user.companyName.charAt(0) : '👤';
+      } catch (error) {
+        console.error('解析用户数据失败:', error);
+        document.getElementById('userName').textContent = '用户';
+        document.getElementById('userEmail').textContent = '数据异常';
+      }
+      
+      // 退出登录功能
+      document.getElementById('logoutBtn').addEventListener('click', function() {
+        if (confirm('确定要退出登录吗？')) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          window.location.href = 'login.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html>
