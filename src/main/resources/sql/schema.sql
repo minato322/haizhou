@@ -1,7 +1,8 @@
--- 创建数据库
-CREATE DATABASE IF NOT EXISTS smart_tax_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+-- 移除创建数据库语句，Zeabur已创建数据库
+-- CREATE DATABASE IF NOT EXISTS smart_tax_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE smart_tax_db;
+-- 修改为使用Zeabur提供的数据库名称
+USE zeabur;
 
 -- 用户表
 CREATE TABLE IF NOT EXISTS user (
