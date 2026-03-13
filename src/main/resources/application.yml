@@ -30,7 +30,7 @@ jwt:
   expiration: 86400000
 
 deepseek:
-  api-key: sk-e83e2eb2a4e34e1b8419d6c1a5f672a8
+  api-key: sk-0e097abc650d410fadbb1134de365baa
   api-url: https://api.deepseek.com/v1/chat/completions
   model: deepseek-chat
 
