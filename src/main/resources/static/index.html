@@ -5,245 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>海舟智税云</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
-    }
-    body {
-      background-color: #f5f7fa;
-      color: #333;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    .app-header {
-      background: #1976d2;
-      color: white;
-      padding: 16px 16px 12px;
-      text-align: center;
-      font-size: 18px;
-      font-weight: 600;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .logo-container {
-      text-align: center;
-      padding: 20px 0;
-      background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    .logo {
-      width: 150px;
-      height: auto;
-      max-width: 90%;
-      display: inline-block;
-    }
-    .app-container {
-      max-width: 500px;
-      margin: 0 auto;
-      padding: 16px;
-    }
-    .card {
-      background: white;
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    .card-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 12px;
-      color: #1976d2;
-    }
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 14px;
-      background: #1976d2;
-      color: white;
-      text-align: center;
-      border-radius: 8px;
-      font-weight: 600;
-      margin: 12px 0;
-      text-decoration: none;
-      border: none;
-      font-size: 16px;
-    }
-    .btn-outline {
-      background: transparent;
-      border: 1px solid #1976d2;
-      color: #1976d2;
-    }
-    .list-item {
-      padding: 14px 0;
-      border-bottom: 1px solid #eee;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .list-item:last-child {
-      border-bottom: none;
-    }
-    .tab-bar {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      display: flex;
-      background: white;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-      height: 56px;
-    }
-    .tab-item {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: #888;
-      text-decoration: none;
-      padding: 4px 0;
-    }
-    .tab-item.active {
-      color: #1976d2;
-    }
-    .tab-item i {
-      font-size: 20px;
-      margin-bottom: 2px;
-    }
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-    ul {
-      padding-left: 16px;
-    }
-    li {
-      margin: 8px 0;
-    }
-    .service-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 8px;
-    }
-    .service-item {
-      background: #f0f8ff;
-      padding: 12px;
-      border-radius: 8px;
-      text-align: center;
-      font-size: 14px;
-      color: #1976d2;
-      border: 1px solid #cce5ff;
-    }
-    .service-item:hover {
-      background: #e6f2ff;
-    }
-    /* 弹窗样式 */
-    .modal {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.4);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 200;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      pointer-events: none;
-    }
-    .modal.show {
-      display: flex;
-      opacity: 1;
-      visibility: visible;
-      pointer-events: all;
-    }
-    .modal-content {
-      background: white;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 450px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-      overflow: hidden;
-      position: relative;
-      animation: modalSlideIn 0.4s ease-out;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; }
+    body { background-color: #f5f7fa; color: #333; line-height: 1.6; overflow-x: hidden; }
+    .app-header { background: #1976d2; color: white; padding: 16px 16px 12px; text-align: center; font-size: 18px; font-weight: 600; position: sticky; top: 0; z-index: 100; }
+    .logo-container { text-align: center; padding: 20px 0; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .logo { width: 150px; height: auto; max-width: 90%; display: inline-block; }
+    .app-container { max-width: 500px; margin: 0 auto; padding: 16px; }
+    .card { background: white; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .card-title { font-size: 16px; font-weight: 600; margin-bottom: 12px; color: #1976d2; }
+    .btn { display: block; width: 100%; padding: 14px; background: #1976d2; color: white; text-align: center; border-radius: 8px; font-weight: 600; margin: 12px 0; text-decoration: none; border: none; font-size: 16px; }
+    .btn-outline { background: transparent; border: 1px solid #1976d2; color: #1976d2; }
+    .list-item { padding: 14px 0; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
+    .list-item:last-child { border-bottom: none; }
+    .tab-bar { position: fixed; bottom: 0; left: 0; right: 0; display: flex; background: white; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); height: 56px; }
+    .tab-item { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 12px; color: #888; text-decoration: none; padding: 4px 0; }
+    .tab-item.active { color: #1976d2; }
+    .tab-item i { font-size: 20px; margin-bottom: 2px; }
+    a { color: inherit; text-decoration: none; }
+    ul { padding-left: 16px; }
+    li { margin: 8px 0; }
+    .service-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 8px; }
+    .service-item { background: #f0f8ff; padding: 12px; border-radius: 8px; text-align: center; font-size: 14px; color: #1976d2; border: 1px solid #cce5ff; }
+    .service-item:hover { background: #e6f2ff; }
+    /* ✅ 修复：弹窗初始状态为隐藏 */
+    .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); display: none; justify-content: center; align-items: center; z-index: 200; opacity: 0; visibility: hidden; transition: all 0.3s ease; pointer-events: none; }
+    .modal.show { display: flex; opacity: 1; visibility: visible; pointer-events: all; }
+    .modal-content { background: white; border-radius: 16px; width: 90%; max-width: 450px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); overflow: hidden; position: relative; animation: modalSlideIn 0.4s ease-out; }
     @keyframes modalSlideIn {
-      from {
-        transform: translateY(20px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
-    .modal-header {
-      background: linear-gradient(135deg, #1976d2, #0d47a1);
-      color: white;
-      padding: 16px 20px;
-      text-align: center;
-      position: relative;
-    }
-    .modal-close {
-      position: absolute;
-      top: 12px;
-      right: 15px;
-      font-size: 20px;
-      cursor: pointer;
-      color: rgba(255,255,255,0.8);
-      transition: all 0.2s;
-    }
-    .modal-close:hover {
-      color: white;
-      transform: rotate(90deg);
-    }
-    .modal-title {
-      font-size: 16px;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-    }
-    .modal-body {
-      padding: 20px;
-      line-height: 1.6;
-    }
-    .modal-tag {
-      display: inline-block;
-      background: #e3f2fd;
-      color: #1976d2;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 12px;
-      margin: 0 4px 6px 0;
-    }
-    .modal-highlight {
-      font-weight: 700;
-      color: #1976d2;
-      margin-left: 4px;
-    }
-    .modal-footer {
-      padding: 16px 20px;
-      text-align: center;
-      border-top: 1px solid #eee;
-      color: #666;
-      font-size: 13px;
-    }
-    .footer-note {
-      text-align: center;
-      color: #888;
-      font-size: 12px;
-      padding: 12px 0;
-      margin-top: 16px;
-      line-height: 1.4;
-    }
+    .modal-header { background: linear-gradient(135deg, #1976d2, #0d47a1); color: white; padding: 16px 20px; text-align: center; position: relative; }
+    .modal-close { position: absolute; top: 12px; right: 15px; font-size: 20px; cursor: pointer; color: rgba(255,255,255,0.8); transition: all 0.2s; }
+    .modal-close:hover { color: white; transform: rotate(90deg); }
+    .modal-title { font-size: 16px; font-weight: 600; letter-spacing: 0.5px; }
+    .modal-body { padding: 20px; line-height: 1.6; }
+    .modal-tag { display: inline-block; background: #e3f2fd; color: #1976d2; padding: 4px 10px; border-radius: 20px; font-size: 12px; margin: 0 4px 6px 0; }
+    .modal-highlight { font-weight: 700; color: #1976d2; margin-left: 4px; }
+    .modal-footer { padding: 16px 20px; text-align: center; border-top: 1px solid #eee; color: #666; font-size: 13px; }
+    .footer-note { text-align: center; color: #888; font-size: 12px; padding: 12px 0; margin-top: 16px; line-height: 1.4; }
   </style>
 </head>
 <body>
@@ -251,10 +51,10 @@
   
   <!-- Logo区域 -->
   <div class="logo-container">
-    
+    <img src="logo.png" alt="海舟智税云Logo" class="logo">
   </div>
 
-  <!-- 弹窗 -->
+  <!-- ✅ 修复：弹窗初始隐藏 -->
   <div class="modal" id="introModal">
     <div class="modal-content">
       <div class="modal-header">
@@ -275,43 +75,47 @@
   </div>
 
   <div class="app-container">
-    <!-- 智能退税服务 -->
+    
+    <!-- 核心功能模块 (修改点：整合了所有功能入口) -->
     <div class="card">
-      <div class="card-title">智能退税服务</div>
-      <a href="basic-tax.html" class="list-item">
-        <span>基础智能退税</span>
-        <span>→</span>
+      <div class="card-title">核心功能</div>
+      
+      <!-- 智能单证识别 -->
+      <a href="smart-identification.html" class="list-item">
+        <span>📄 智能单证识别</span>
+        <span>一键录入</span>
       </a>
-      <a href="advanced-analysis.html" class="list-item">
-        <span>高级财务分析</span>
-        <span>→</span>
+
+      <!-- 退税计算 -->
+      <a href="tax-calculation.html" class="list-item">
+        <span>💰 退税计算</span>
+        <span>精准测算</span>
       </a>
-      <a href="api.html" class="list-item">
-        <span>API 接入服务</span>
-        <span>→</span>
+
+      <!-- 合规检查 -->
+      <a href="compliance-check.html" class="list-item">
+        <span>🛡️ 合规风险检查</span>
+        <span>规避风险</span>
+      </a>
+
+      <!-- 区块链存证 -->
+      <a href="blockchain-proof.html" class="list-item">
+        <span>🔗 区块链存证</span>
+        <span>证据固化</span>
       </a>
     </div>
 
-    <!-- 快捷服务（已添加交易数据入口） -->
+    <!-- 快捷服务 (保留原有辅助功能) -->
     <div class="card">
       <div class="card-title">快捷服务</div>
       <div class="service-grid">
-        <a href="exchange.html" class="service-item">💱💱 汇率转换</a>
-        <a href="chat.html" class="service-item">💬💬 在线客服</a>
-        <a href="transaction-data.html" class="service-item">📊📊 交易数据</a>
-        <a href="resources.html" class="service-item">📚📚 政策资源</a>
-        <a href="support.html" class="service-item">❓❓ 技术支持</a>
+        <a href="exchange.html" class="service-item">💱 汇率转换</a>
+        <a href="chat.html" class="service-item">💬 在线客服</a>
+        <a href="resources.html" class="service-item">📚 政策资源</a>
+        <a href="support.html" class="service-item">❓ 技术支持</a>
       </div>
     </div>
 
-    <!-- 功能模块 -->
-    <div class="card">
-      <div class="card-title">功能模块</div>
-      <div class="list-item">
-        <span>智能单证识别</span>
-        <a href="smart-identification.html" target="_blank" style="color:#1976d2;">查看</a>
-      </div>
-    </div>
   </div>
 
   <div class="footer-note">
@@ -325,16 +129,22 @@
     <a href="login.html" class="tab-item"><i>👤</i>我的</a>
   </div>
 
+  <!-- ✅ 修复：关键逻辑 - 使用 sessionStorage 代替 localStorage -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const modal = document.getElementById('introModal');
       const closeBtn = document.getElementById('modalClose');
       
+      // ✅ 关键修复：使用 sessionStorage（浏览器关闭后自动清除）
       const hasShown = sessionStorage.getItem('introModalShown');
-      
+      console.log('[DEBUG] 弹窗状态:', hasShown ? '已显示过（当前会话）' : '首次访问（当前会话）');
+
+      // 仅在当前浏览器会话首次访问时显示
       if (!hasShown) {
+        console.log('[DEBUG] 显示弹窗（新会话）');
         modal.classList.add('show');
         
+        // 3秒后自动关闭
         setTimeout(() => {
           closeModal();
         }, 3000);
@@ -342,11 +152,11 @@
 
       function closeModal() {
         modal.classList.remove('show');
-        sessionStorage.setItem('introModalShown', 'true');
+        sessionStorage.setItem('introModalShown', 'true'); // 标记已显示（当前会话）
+        console.log('[DEBUG] 弹窗已关闭，状态记录为 true（当前会话）');
       }
 
       closeBtn.addEventListener('click', closeModal);
-      
       modal.addEventListener('click', (e) => {
         if (e.target === modal) {
           closeModal();
